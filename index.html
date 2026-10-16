@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <title>Dois Céus · Mapa das Estrelas</title>
+
+  <!-- Fontes -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <!-- Estilos -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Cursor estelar -->
+  <div class="cursor-estelar" id="cursorEstelar" aria-hidden="true"></div>
+
+  <!-- Canvas de estrelas -->
+  <canvas id="starfield" aria-hidden="true"></canvas>
+
+  <!-- Nebulosas -->
+  <div class="nebula nebula-1" aria-hidden="true"></div>
+  <div class="nebula nebula-2" aria-hidden="true"></div>
+  <div class="nebula nebula-3" aria-hidden="true"></div>
+
+  <!-- Grain cinematográfico -->
+  <div class="grain" aria-hidden="true"></div>
+
+  <!-- Selo chinês decorativo -->
+  <div class="selo-chines" aria-hidden="true">
+    <span>天<br>地</span>
+  </div>
+
+  <!-- Container principal -->
+  <div class="container">
+    <!-- Cabeçalho discreto -->
+    <div class="cabecalho">
+      <div class="marca">
+        <span class="selo">✦</span> Dois Céus <span class="selo">✦</span>
+      </div>
+    </div>
+
+    <div class="card-principal">
+      <h1 class="titulo">
+        <span class="ornamento">✧</span> Mapa das Estrelas <span class="ornamento">✧</span>
+      </h1>
+      <p class="subtitulo">Descubra seus dois céus</p>
+
+      <!-- Campo de data -->
+      <div class="campo-data-wrapper">
+        <label for="dataNasc">
+          <span class="icone-lua">🌙</span> Data de nascimento
+        </label>
+        <div class="input-data-custom">
+          <span class="estrela-input" aria-hidden="true">✦</span>
+          <span class="estrela-input" aria-hidden="true">✧</span>
+          <span class="estrela-input" aria-hidden="true">✦</span>
+          <span class="icone-planeta" aria-hidden="true">🪐</span>
+          <input type="date" id="dataNasc" name="dataNasc" aria-label="Selecione sua data de nascimento">
+        </div>
+      </div>
+
+      <!-- Botões -->
+      <div class="botoes">
+        <button class="btn btn-primario" id="btnDescobrir">
+          ✦ Revelar meus céus
+        </button>
+        <button class="btn btn-secundario" id="btnLimpar">
+          ✧ Olhar o céu outra vez
+        </button>
+      </div>
+
+      <!-- Botão Salvar (aparece com resultado) -->
+      <div class="botoes" id="areaSalvar" style="display:none; margin-top:0.6rem;">
+        <button class="btn btn-salvar" id="btnSalvar">
+          ✦ Guardar esta memória
+        </button>
+      </div>
+
+      <!-- Erro -->
+      <div id="erroMsg" class="erro-msg" role="alert"></div>
+
+      <!-- Resultado -->
+      <div id="resultado" class="resultado-container">
+        <div class="dois-ceus">
+          <!-- Lado Ocidental -->
+          <div class="card-ceu" id="cardOcidental">
+            <div class="ceu-rotulo">
+              <span>✦ Céu Ocidental</span>
+              <span class="linha-deco"></span>
+            </div>
+            <div class="ceu-header">
+              <div class="ceu-simbolo" id="signoEmoji">♈</div>
+              <div class="ceu-info">
+                <div class="ceu-nome" id="signoNome">Áries</div>
+                <div class="ceu-sub" id="signoPeriodo">21 de março a 19 de abril</div>
+              </div>
+            </div>
+
+            <div class="constelacao-container">
+              <svg class="constelacao-svg" viewBox="0 0 400 100" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+                <!-- Constelação gerada via JS -->
+              </svg>
+            </div>
+
+            <div class="ceu-descricao" id="signoDescricao">
+              Texto poético sobre o signo.
+            </div>
+
+            <div class="ceu-elemento" id="signoElemento">Elemento · Fogo</div>
+          </div>
+
+          <!-- Lado Chinês -->
+          <div class="card-ceu" id="cardChines">
+            <div class="ceu-rotulo">
+              <span>✦ Céu Chinês</span>
+              <span class="linha-deco"></span>
+            </div>
+            <div class="animal-estilizado">
+              <div class="animal-simbolo" id="chinesEmoji">🐉</div>
+              <div>
+                <div class="animal-nome" id="chinesAnimal">Dragão</div>
+                <div class="animal-ciclo" id="chinesCiclo">Ano do Dragão</div>
+              </div>
+            </div>
+
+            <div class="ceu-descricao" id="chinesDescricao">
+              Texto poético sobre o animal.
+            </div>
+
+            <div class="ceu-elemento" id="chinesElemento">Elemento · Terra</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Histórico de memórias (SQLite) -->
+      <div class="historico-container" id="historicoContainer">
+        <div class="historico-titulo">✦ Memórias do Céu ✦</div>
+        <div class="historico-lista" id="historicoLista">
+          <!-- Preenchido via JS -->
+        </div>
+      </div>
+
+      <div class="rodape">
+        <span class="simbolo">✦</span> Duas linguagens do céu <span class="simbolo">✦</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Brilho de passagem -->
+  <div class="brilho-passagem" id="brilhoPassagem" aria-hidden="true"></div>
+
+
+  <!-- Banco de dados SQLite (separado) -->
+  <script src="database.js"></script>
+  <!-- Lógica principal -->
+  <script src="app.js"></script>
+</body>
+</html>

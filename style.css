@@ -1,0 +1,1115 @@
+    /* ============================================================
+       RESET & BASE
+       ============================================================ */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --espaco-preto: #030308;
+      --azul-noite: #07071a;
+      --azul-profundo: #0b0b24;
+      --dourado-champagne: #d9c18e;
+      --dourado-claro: #f2e2b0;
+      --dourado-brilho: #fff0cc;
+      --prata: #c8d0e0;
+      --violeta: #7a5fa0;
+      --violeta-suave: #3d2a5c;
+      --vidro: rgba(12, 12, 35, 0.5);
+      --borda-vidro: rgba(200, 185, 255, 0.15);
+      --sombra-vidro: 0 25px 60px -20px rgba(0, 0, 0, 0.9);
+      --fonte-titulo: 'Cormorant Garamond', 'Georgia', serif;
+      --fonte-corpo: 'Inter', 'Segoe UI', system-ui, sans-serif;
+    }
+
+    html, body {
+      width: 100%;
+      min-height: 100vh;
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: radial-gradient(ellipse at 50% 30%, #0e0e28 0%, #060618 45%, #020208 100%);
+      font-family: var(--fonte-corpo);
+      color: #eae8f5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.2rem;
+      position: relative;
+      min-height: 100vh;
+      cursor: none;
+    }
+
+    /* Cursor estelar */
+    .cursor-estelar {
+      position: fixed;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 240, 200, 0.9) 0%, rgba(217, 193, 142, 0.4) 40%, transparent 70%);
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: width 0.2s, height 0.2s, background 0.2s;
+      mix-blend-mode: screen;
+      filter: blur(0.5px);
+    }
+
+    .cursor-estelar::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 30px;
+      height: 30px;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(217, 193, 142, 0.15) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    /* ============================================================
+       CANVAS DE FUNDO (ESTRELAS)
+       ============================================================ */
+    #starfield {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* ============================================================
+       NEBULOSAS
+       ============================================================ */
+    .nebula {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(100px);
+      opacity: 0.14;
+      z-index: 0;
+      pointer-events: none;
+      animation: flutuarNebulosa 25s ease-in-out infinite alternate;
+    }
+
+    .nebula-1 {
+      width: 550px;
+      height: 450px;
+      background: radial-gradient(circle, #5a2d8a, #1a0a3a);
+      top: -12%;
+      left: -12%;
+    }
+
+    .nebula-2 {
+      width: 650px;
+      height: 550px;
+      background: radial-gradient(circle, #1a3a7a, #0a1230);
+      bottom: -18%;
+      right: -12%;
+      animation-delay: -8s;
+    }
+
+    .nebula-3 {
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, #8a6a2a, #2a1a0a);
+      top: 35%;
+      left: 55%;
+      opacity: 0.07;
+      animation-delay: -16s;
+    }
+
+    @keyframes flutuarNebulosa {
+      0% { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(50px, -40px) scale(1.2); }
+    }
+
+    /* ============================================================
+       ESTRELA CADENTE
+       ============================================================ */
+    .estrela-cadente {
+      position: fixed;
+      width: 3px;
+      height: 3px;
+      background: white;
+      border-radius: 50%;
+      box-shadow: 0 0 10px 3px rgba(255, 255, 255, 0.9), 0 0 30px 10px rgba(200, 180, 255, 0.3);
+      z-index: 1;
+      pointer-events: none;
+      opacity: 0;
+    }
+
+    .estrela-cadente::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 100%;
+      width: 150px;
+      height: 1px;
+      background: linear-gradient(90deg, rgba(255,255,255,0.95), rgba(200,180,255,0.4), transparent);
+      transform: translateY(-50%);
+      border-radius: 50%;
+    }
+
+    @keyframes cadente {
+      0% { opacity: 0; transform: translate(0, 0) rotate(-35deg); }
+      8% { opacity: 1; }
+      75% { opacity: 0.9; }
+      100% { opacity: 0; transform: translate(-500px, 350px) rotate(-35deg); }
+    }
+
+    /* ============================================================
+       GRAIN (TEXTURA CINEMATOGRÁFICA)
+       ============================================================ */
+    .grain {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 9998;
+      pointer-events: none;
+      opacity: 0.035;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+      background-size: 200px 200px;
+      mix-blend-mode: overlay;
+    }
+
+    /* ============================================================
+       POEIRA ESTELAR
+       ============================================================ */
+    .poeira {
+      position: fixed;
+      width: 2px;
+      height: 2px;
+      background: rgba(255, 255, 255, 0.35);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 2;
+      animation: flutuarPoeira linear infinite;
+    }
+
+    @keyframes flutuarPoeira {
+      0% { transform: translateY(0) translateX(0); opacity: 0; }
+      10% { opacity: 0.5; }
+      90% { opacity: 0.5; }
+      100% { transform: translateY(-100vh) translateX(40px); opacity: 0; }
+    }
+
+    /* ============================================================
+       CONTAINER PRINCIPAL
+       ============================================================ */
+    .container {
+      position: relative;
+      z-index: 10;
+      width: 100%;
+      max-width: 820px;
+      margin: 2rem auto;
+      transition: transform 0.3s ease;
+    }
+
+    /* ============================================================
+       CABEÇALHO DISCRETO
+       ============================================================ */
+    .cabecalho {
+      text-align: center;
+      margin-bottom: 0.5rem;
+      position: relative;
+    }
+
+    .marca {
+      font-family: var(--fonte-titulo);
+      font-size: 1rem;
+      font-weight: 400;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: rgba(217, 193, 142, 0.6);
+      text-shadow: 0 0 20px rgba(217, 193, 142, 0.2);
+    }
+
+    .marca .selo {
+      display: inline-block;
+      font-size: 0.9rem;
+      margin: 0 0.5rem;
+      opacity: 0.5;
+    }
+
+    /* ============================================================
+       CARD PRINCIPAL
+       ============================================================ */
+    .card-principal {
+      background: rgba(10, 10, 32, 0.4);
+      backdrop-filter: blur(20px) saturate(1.4);
+      -webkit-backdrop-filter: blur(20px) saturate(1.4);
+      border-radius: 2.4rem;
+      border: 1px solid var(--borda-vidro);
+      padding: 2.6rem 2.2rem 2.4rem;
+      box-shadow: var(--sombra-vidro), inset 0 1px 2px rgba(255, 255, 255, 0.06);
+      transition: box-shadow 0.6s ease;
+    }
+
+    .card-principal:hover {
+      box-shadow: 
+        0 30px 70px -20px rgba(0, 0, 0, 0.95),
+        0 0 80px -15px rgba(160, 120, 240, 0.18),
+        inset 0 1px 3px rgba(255, 255, 255, 0.08);
+    }
+
+    /* ============================================================
+       TÍTULO
+       ============================================================ */
+    .titulo {
+      font-family: var(--fonte-titulo);
+      font-size: 2.8rem;
+      font-weight: 500;
+      text-align: center;
+      color: var(--dourado-champagne);
+      letter-spacing: 0.06em;
+      text-shadow: 
+        0 0 25px rgba(217, 193, 142, 0.5),
+        0 0 70px rgba(217, 193, 142, 0.15),
+        0 0 120px rgba(160, 120, 240, 0.08);
+      line-height: 1.2;
+      margin-bottom: 0.1rem;
+    }
+
+    .titulo .ornamento {
+      display: inline-block;
+      font-size: 1.6rem;
+      vertical-align: middle;
+      margin: 0 0.6rem;
+      opacity: 0.7;
+      animation: piscarOrnamento 4s ease-in-out infinite;
+    }
+
+    @keyframes piscarOrnamento {
+      0%, 100% { opacity: 0.5; transform: scale(1); }
+      50% { opacity: 0.9; transform: scale(1.05); }
+    }
+
+    .subtitulo {
+      font-family: var(--fonte-corpo);
+      font-size: 0.9rem;
+      font-weight: 300;
+      text-align: center;
+      color: rgba(200, 200, 235, 0.55);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      margin-bottom: 2.4rem;
+      position: relative;
+    }
+
+    .subtitulo::after {
+      content: '';
+      display: block;
+      width: 80px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--dourado-champagne), transparent);
+      margin: 0.9rem auto 0;
+      opacity: 0.4;
+    }
+
+    /* ============================================================
+       SELO CHINÊS (DECORATIVO)
+       ============================================================ */
+    .selo-chines {
+      position: fixed;
+      bottom: 2.5rem;
+      left: 2.5rem;
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      border: 1.5px solid rgba(217, 193, 142, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--fonte-titulo);
+      font-size: 0.75rem;
+      color: rgba(217, 193, 142, 0.5);
+      letter-spacing: 0.05em;
+      z-index: 5;
+      opacity: 0.5;
+      transition: opacity 0.3s;
+      pointer-events: none;
+      text-align: center;
+      line-height: 1.1;
+      padding: 0.2rem;
+    }
+
+    .selo-chines:hover {
+      opacity: 0.8;
+    }
+
+    /* ============================================================
+       CAMPO DE DATA ESPECIAL
+       ============================================================ */
+    .campo-data-wrapper {
+      position: relative;
+      margin-bottom: 1.8rem;
+    }
+
+    .campo-data-wrapper label {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: var(--fonte-corpo);
+      font-size: 0.82rem;
+      font-weight: 400;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(200, 190, 230, 0.65);
+      margin-bottom: 0.7rem;
+      padding-left: 0.3rem;
+    }
+
+    .campo-data-wrapper label .icone-lua {
+      font-size: 1.1rem;
+      filter: drop-shadow(0 0 8px rgba(217, 193, 142, 0.5));
+      opacity: 0.8;
+    }
+
+    .input-data-custom {
+      position: relative;
+      display: flex;
+      align-items: center;
+      background: rgba(6, 6, 22, 0.7);
+      border: 1.5px solid rgba(180, 160, 220, 0.22);
+      border-radius: 3.5rem;
+      padding: 0.15rem 0.15rem 0.15rem 1.5rem;
+      transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      box-shadow: 
+        0 4px 25px -6px rgba(0, 0, 0, 0.7),
+        inset 0 0 30px rgba(80, 50, 140, 0.06);
+      overflow: hidden;
+    }
+
+    .input-data-custom::before {
+      content: '';
+      position: absolute;
+      inset: -1.5px;
+      border-radius: 3.5rem;
+      padding: 1.5px;
+      background: linear-gradient(135deg, rgba(217, 193, 142, 0.5), rgba(120, 90, 200, 0.3), rgba(217, 193, 142, 0.5));
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+
+    .input-data-custom:focus-within::before {
+      opacity: 1;
+    }
+
+    .input-data-custom:focus-within {
+      border-color: rgba(217, 193, 142, 0.45);
+      box-shadow: 
+        0 6px 35px -8px rgba(0, 0, 0, 0.8),
+        0 0 50px -10px rgba(160, 120, 240, 0.25),
+        inset 0 0 35px rgba(80, 50, 140, 0.1);
+    }
+
+    .input-data-custom .icone-planeta {
+      font-size: 1.5rem;
+      margin-right: 0.6rem;
+      filter: drop-shadow(0 0 8px rgba(180, 160, 255, 0.5));
+      animation: girarLento 15s linear infinite;
+      opacity: 0.7;
+    }
+
+    @keyframes girarLento {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    input[type="date"] {
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      color: #eae8f5;
+      font-family: var(--fonte-corpo);
+      font-size: 1.05rem;
+      font-weight: 400;
+      padding: 1rem 0.8rem 1rem 0;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      color-scheme: dark;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+
+    input[type="date"]::-webkit-calendar-picker-indicator {
+      filter: invert(0.8) sepia(1) saturate(3) hue-rotate(200deg);
+      cursor: pointer;
+      opacity: 0.6;
+      transition: opacity 0.3s;
+      width: 22px;
+      height: 22px;
+    }
+
+    input[type="date"]::-webkit-calendar-picker-indicator:hover {
+      opacity: 1;
+    }
+
+    /* Estrelas decorativas ao redor do input */
+    .estrela-input {
+      position: absolute;
+      pointer-events: none;
+      font-size: 0.6rem;
+      color: var(--dourado-champagne);
+      opacity: 0.3;
+      animation: piscarEstrela 5s ease-in-out infinite;
+    }
+
+    .estrela-input:nth-child(1) { top: -6px; right: 25px; animation-delay: 0s; }
+    .estrela-input:nth-child(2) { bottom: -4px; left: 50px; animation-delay: 1.8s; font-size: 0.45rem; }
+    .estrela-input:nth-child(3) { top: 50%; right: -10px; animation-delay: 3.5s; font-size: 0.55rem; }
+
+    @keyframes piscarEstrela {
+      0%, 100% { opacity: 0.15; transform: scale(0.85); }
+      50% { opacity: 0.7; transform: scale(1.15); }
+    }
+
+    /* ============================================================
+       BOTÕES
+       ============================================================ */
+    .botoes {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.9rem;
+      justify-content: center;
+      margin-top: 0.5rem;
+    }
+
+    .btn {
+      font-family: var(--fonte-corpo);
+      font-size: 0.9rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      padding: 1rem 2.4rem;
+      border-radius: 3.5rem;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+      border: none;
+      position: relative;
+      overflow: hidden;
+      text-transform: uppercase;
+    }
+
+    .btn-primario {
+      background: linear-gradient(135deg, #1e1240 0%, #140a30 50%, #1e1240 100%);
+      color: var(--dourado-claro);
+      border: 1.5px solid rgba(217, 193, 142, 0.3);
+      box-shadow: 
+        0 8px 35px -10px rgba(0, 0, 0, 0.8),
+        0 0 40px -10px rgba(217, 193, 142, 0.15),
+        inset 0 1px 2px rgba(255, 255, 255, 0.05);
+    }
+
+    .btn-primario::before {
+      content: '';
+      position: absolute;
+      inset: -2px;
+      border-radius: 3.5rem;
+      background: linear-gradient(135deg, rgba(217, 193, 142, 0.7), rgba(160, 120, 240, 0.4), rgba(217, 193, 142, 0.7));
+      opacity: 0;
+      transition: opacity 0.5s ease;
+      z-index: -1;
+      filter: blur(10px);
+    }
+
+    .btn-primario:hover {
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: 
+        0 14px 45px -10px rgba(0, 0, 0, 0.9),
+        0 0 60px -10px rgba(217, 193, 142, 0.35),
+        0 0 100px -15px rgba(160, 120, 240, 0.2),
+        inset 0 1px 3px rgba(255, 255, 255, 0.1);
+      border-color: rgba(217, 193, 142, 0.6);
+    }
+
+    .btn-primario:hover::before {
+      opacity: 1;
+    }
+
+    .btn-primario:active {
+      transform: translateY(-1px) scale(0.99);
+    }
+
+    .btn-secundario {
+      background: rgba(18, 18, 42, 0.5);
+      color: rgba(200, 190, 230, 0.7);
+      border: 1.5px solid rgba(160, 140, 200, 0.2);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 4px 20px -6px rgba(0, 0, 0, 0.6);
+    }
+
+    .btn-secundario:hover {
+      background: rgba(30, 26, 60, 0.7);
+      border-color: rgba(180, 160, 220, 0.4);
+      color: #e0d8f8;
+      transform: translateY(-2px);
+      box-shadow: 
+        0 10px 30px -8px rgba(0, 0, 0, 0.7),
+        0 0 30px -8px rgba(160, 120, 240, 0.12);
+    }
+
+    .btn-secundario:active {
+      transform: translateY(0);
+    }
+
+    /* Botão de salvar (DB) */
+    .btn-salvar {
+      background: linear-gradient(135deg, #1a1035 0%, #0e0820 100%);
+      color: var(--dourado-claro);
+      border: 1.5px solid rgba(217, 193, 142, 0.35);
+      margin-top: 0.4rem;
+    }
+
+    .btn-salvar:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px -8px rgba(0,0,0,0.8), 0 0 40px -10px rgba(217,193,142,0.25);
+    }
+
+    /* Histórico / Memórias */
+    .historico-container {
+      margin-top: 2rem;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .historico-container.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .historico-titulo {
+      font-family: var(--fonte-titulo);
+      font-size: 1.4rem;
+      color: var(--dourado-champagne);
+      text-align: center;
+      margin-bottom: 1rem;
+      letter-spacing: 0.08em;
+    }
+
+    .historico-lista {
+      display: flex;
+      flex-direction: column;
+      gap: 0.7rem;
+      max-height: 280px;
+      overflow-y: auto;
+      padding-right: 0.4rem;
+    }
+
+    .historico-lista::-webkit-scrollbar {
+      width: 4px;
+    }
+    .historico-lista::-webkit-scrollbar-thumb {
+      background: rgba(217,193,142,0.3);
+      border-radius: 2px;
+    }
+
+    .item-historico {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(15,15,40,0.45);
+      border: 1px solid rgba(200,185,255,0.12);
+      border-radius: 1.6rem;
+      padding: 0.75rem 1.1rem;
+      font-size: 0.82rem;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .item-historico:hover {
+      background: rgba(25,25,55,0.6);
+      border-color: rgba(217,193,142,0.3);
+      transform: translateX(4px);
+    }
+
+    .item-info {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      flex: 1;
+    }
+
+    .item-signos {
+      font-family: var(--fonte-titulo);
+      font-size: 1.1rem;
+      color: var(--dourado-claro);
+    }
+
+    .item-data {
+      color: rgba(200,195,220,0.65);
+      font-size: 0.75rem;
+      letter-spacing: 0.04em;
+    }
+
+    .btn-remover {
+      background: transparent;
+      border: none;
+      color: rgba(240,160,180,0.6);
+      font-size: 1rem;
+      cursor: pointer;
+      padding: 0.3rem 0.5rem;
+      border-radius: 50%;
+      transition: all 0.2s;
+    }
+
+    .btn-remover:hover {
+      color: #f0a0b0;
+      background: rgba(80,20,40,0.3);
+    }
+
+    /* ============================================================
+       MENSAGEM DE ERRO
+       ============================================================ */
+    .erro-msg {
+      color: #f0c8d8;
+      background: rgba(60, 15, 35, 0.35);
+      backdrop-filter: blur(10px);
+      padding: 1rem 1.5rem;
+      border-radius: 2.5rem;
+      font-size: 0.9rem;
+      font-weight: 300;
+      text-align: center;
+      margin-top: 1.3rem;
+      border: 1px solid rgba(240, 150, 180, 0.18);
+      display: none;
+      letter-spacing: 0.03em;
+      box-shadow: 0 4px 25px -6px rgba(0, 0, 0, 0.6);
+      font-style: italic;
+    }
+
+    .erro-msg.show {
+      display: block;
+      animation: aparecerErro 0.5s ease;
+    }
+
+    @keyframes aparecerErro {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ============================================================
+       RESULTADO (DOIS CÉUS)
+       ============================================================ */
+    .resultado-container {
+      margin-top: 2.2rem;
+      opacity: 0;
+      transform: translateY(30px) scale(0.96);
+      pointer-events: none;
+      transition: 
+        opacity 1s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+        transform 1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      will-change: transform, opacity;
+    }
+
+    .resultado-container.show {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      pointer-events: auto;
+    }
+
+    /* Brilho que atravessa a tela */
+    .brilho-passagem {
+      position: fixed;
+      top: 0;
+      left: -100%;
+      width: 60%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(217, 193, 142, 0.06), rgba(255, 240, 200, 0.1), rgba(217, 193, 142, 0.06), transparent);
+      z-index: 100;
+      pointer-events: none;
+      opacity: 0;
+    }
+
+    .brilho-passagem.ativo {
+      animation: passagemBrilho 1.5s ease-out forwards;
+    }
+
+    @keyframes passagemBrilho {
+      0% { left: -100%; opacity: 0; }
+      20% { opacity: 1; }
+      80% { opacity: 1; }
+      100% { left: 150%; opacity: 0; }
+    }
+
+    /* Grid dos dois cards */
+    .dois-ceus {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.2rem;
+    }
+
+    @media (max-width: 680px) {
+      .dois-ceus {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .card-ceu {
+      background: rgba(12, 12, 38, 0.5);
+      backdrop-filter: blur(24px) saturate(1.5);
+      -webkit-backdrop-filter: blur(24px) saturate(1.5);
+      border-radius: 2rem;
+      border: 1px solid rgba(200, 185, 255, 0.14);
+      padding: 1.8rem 1.5rem 1.6rem;
+      box-shadow: 
+        0 20px 50px -16px rgba(0, 0, 0, 0.85),
+        0 0 50px -14px rgba(140, 100, 220, 0.12),
+        inset 0 1px 2px rgba(255, 255, 255, 0.06);
+      position: relative;
+      overflow: hidden;
+      transition: box-shadow 0.5s ease, transform 0.5s ease, border-color 0.5s ease;
+    }
+
+    .card-ceu:hover {
+      transform: translateY(-5px);
+      border-color: rgba(200, 185, 255, 0.25);
+      box-shadow: 
+        0 28px 65px -18px rgba(0, 0, 0, 0.9),
+        0 0 70px -14px rgba(180, 140, 255, 0.2),
+        inset 0 1px 3px rgba(255, 255, 255, 0.08);
+    }
+
+    .card-ceu::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: conic-gradient(from 0deg, transparent, rgba(217, 193, 142, 0.04), transparent, rgba(160, 120, 240, 0.04), transparent);
+      animation: rotacaoBrilho 18s linear infinite;
+      pointer-events: none;
+    }
+
+    @keyframes rotacaoBrilho {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .card-ceu .ceu-rotulo {
+      font-family: var(--fonte-corpo);
+      font-size: 0.65rem;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(200, 185, 255, 0.5);
+      margin-bottom: 0.8rem;
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .card-ceu .ceu-rotulo .linha-deco {
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, rgba(200, 185, 255, 0.2), transparent);
+    }
+
+    /* Cabeçalho do signo */
+    .ceu-header {
+      display: flex;
+      align-items: center;
+      gap: 0.9rem;
+      margin-bottom: 0.8rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .ceu-simbolo {
+      font-size: 3.4rem;
+      line-height: 1;
+      filter: drop-shadow(0 0 18px rgba(217, 193, 142, 0.45)) drop-shadow(0 0 35px rgba(160, 120, 240, 0.15));
+      animation: flutuarSimbolo 5s ease-in-out infinite;
+    }
+
+    @keyframes flutuarSimbolo {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
+
+    .ceu-info {
+      flex: 1;
+    }
+
+    .ceu-nome {
+      font-family: var(--fonte-titulo);
+      font-size: 2rem;
+      font-weight: 600;
+      color: var(--dourado-claro);
+      letter-spacing: 0.04em;
+      text-shadow: 
+        0 0 20px rgba(217, 193, 142, 0.35),
+        0 0 50px rgba(217, 193, 142, 0.1);
+      line-height: 1.1;
+    }
+
+    .ceu-sub {
+      font-size: 0.78rem;
+      font-weight: 300;
+      color: rgba(200, 190, 230, 0.6);
+      letter-spacing: 0.06em;
+      margin-top: 0.15rem;
+    }
+
+    /* Constelação */
+    .constelacao-container {
+      position: relative;
+      height: 80px;
+      margin: 0.6rem 0;
+      z-index: 1;
+      opacity: 0.8;
+    }
+
+    .constelacao-svg {
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+    }
+
+    .constelacao-svg line {
+      stroke: rgba(217, 193, 142, 0.45);
+      stroke-width: 1;
+      stroke-dasharray: 3 3;
+      animation: tracarLinha 2.5s ease forwards;
+    }
+
+    @keyframes tracarLinha {
+      from { stroke-dashoffset: 200; opacity: 0; }
+      to { stroke-dashoffset: 0; opacity: 1; }
+    }
+
+    .constelacao-svg circle {
+      fill: #fff;
+      filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.8)) drop-shadow(0 0 10px rgba(217, 193, 142, 0.5));
+      animation: brilharEstrela 3s ease-in-out infinite alternate;
+    }
+
+    @keyframes brilharEstrela {
+      0% { opacity: 0.6; r: 2; }
+      100% { opacity: 1; r: 3.2; }
+    }
+
+    /* Descrição poética */
+    .ceu-descricao {
+      font-family: var(--fonte-corpo);
+      font-size: 0.88rem;
+      font-weight: 300;
+      line-height: 1.7;
+      color: rgba(220, 215, 240, 0.85);
+      letter-spacing: 0.02em;
+      border-left: 2px solid rgba(217, 193, 142, 0.35);
+      padding-left: 1rem;
+      margin-top: 0.8rem;
+      position: relative;
+      z-index: 1;
+      font-style: italic;
+    }
+
+    .ceu-elemento {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 400;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(200, 185, 255, 0.6);
+      background: rgba(60, 40, 100, 0.25);
+      padding: 0.25rem 0.8rem;
+      border-radius: 2rem;
+      border: 1px solid rgba(160, 130, 220, 0.15);
+      margin-top: 0.8rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ============================================================
+       ANIMAL CHINÊS ESTILIZADO
+       ============================================================ */
+    .animal-estilizado {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      margin: 0.6rem 0;
+      position: relative;
+      z-index: 1;
+    }
+
+    .animal-simbolo {
+      font-size: 2.8rem;
+      line-height: 1;
+      filter: drop-shadow(0 0 15px rgba(180, 150, 240, 0.4));
+      animation: flutuarAnimal 6s ease-in-out infinite;
+    }
+
+    @keyframes flutuarAnimal {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-4px) rotate(2deg); }
+    }
+
+    .animal-nome {
+      font-family: var(--fonte-titulo);
+      font-size: 1.6rem;
+      font-weight: 600;
+      color: var(--prata);
+      text-shadow: 0 0 15px rgba(180, 160, 220, 0.25);
+      letter-spacing: 0.03em;
+    }
+
+    .animal-ciclo {
+      font-size: 0.75rem;
+      color: rgba(200, 195, 220, 0.55);
+      font-weight: 300;
+      letter-spacing: 0.05em;
+      margin-top: 0.1rem;
+    }
+
+    /* ============================================================
+       FOOTER
+       ============================================================ */
+    .rodape {
+      text-align: center;
+      margin-top: 2rem;
+      font-size: 0.72rem;
+      color: rgba(150, 140, 180, 0.4);
+      letter-spacing: 0.1em;
+      font-weight: 300;
+    }
+
+    .rodape .simbolo {
+      display: inline-block;
+      margin: 0 0.5rem;
+      opacity: 0.5;
+    }
+
+    /* ============================================================
+       RESPONSIVO
+       ============================================================ */
+    @media (max-width: 640px) {
+      body {
+        cursor: auto;
+      }
+
+      .cursor-estelar {
+        display: none;
+      }
+
+      .card-principal {
+        padding: 1.8rem 1.2rem 1.6rem;
+        border-radius: 1.8rem;
+      }
+
+      .titulo {
+        font-size: 2rem;
+      }
+
+      .ceu-nome {
+        font-size: 1.6rem;
+      }
+
+      .ceu-simbolo {
+        font-size: 2.6rem;
+      }
+
+      .btn {
+        padding: 0.85rem 1.6rem;
+        font-size: 0.8rem;
+        width: 100%;
+      }
+
+      .botoes {
+        flex-direction: column;
+      }
+
+      .ceu-header {
+        gap: 0.7rem;
+      }
+
+      .selo-chines {
+        bottom: 1.2rem;
+        left: 1.2rem;
+        width: 42px;
+        height: 42px;
+        font-size: 0.6rem;
+      }
+
+      .constelacao-container {
+        height: 65px;
+      }
+
+      .animal-simbolo {
+        font-size: 2.2rem;
+      }
+
+      .animal-nome {
+        font-size: 1.3rem;
+      }
+    }
+
+    @media (max-width: 400px) {
+      .titulo {
+        font-size: 1.7rem;
+      }
+
+      .ceu-nome {
+        font-size: 1.4rem;
+      }
+
+      .ceu-simbolo {
+        font-size: 2.2rem;
+      }
+
+      .card-ceu {
+        padding: 1.4rem 1rem 1.2rem;
+      }
+    }
+
+    /* ============================================================
+       ACESSIBILIDADE
+       ============================================================ */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+
+      .cursor-estelar {
+        display: none;
+      }
+
+      body {
+        cursor: auto;
+      }
+    }
+
+    /* Foco visível */
+    .btn:focus-visible,
+    input:focus-visible {
+      outline: 2px solid rgba(217, 193, 142, 0.6);
+      outline-offset: 3px;
+    }
+
+    ::selection {
+      background: rgba(217, 193, 142, 0.25);
+      color: #fff;
+    }
